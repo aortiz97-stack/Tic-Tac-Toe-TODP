@@ -17,7 +17,7 @@ body {
 }
 
 div[class^='cell']{
-    background: pink;
+    background: white;
     display: flex;
     justify-content: center;
     align-items: center;

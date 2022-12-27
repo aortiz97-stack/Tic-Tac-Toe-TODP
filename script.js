@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
 const boardGame = ((document) => {
   const _displayEmptyBoard = () => {
@@ -23,4 +24,11 @@ const boardGame = ((document) => {
   return { createEmptyBoard };
 })(document);
 
-console.log(boardGame.createEmptyBoard());
+const Player = (name, markerType, winningStatus) => {
+  const changeWinningStatus = (newWinningStatus) => {
+    winningStatus = newWinningStatus;
+  };
+  return {
+    name, markerType, winningStatus, changeWinningStatus,
+  };
+};
