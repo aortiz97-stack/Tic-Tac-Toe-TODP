@@ -14,7 +14,7 @@ const boardGame = (() => {
     }
     return gameFinished;
   };
-  
+
   const _addEventListener = (cell, player, document) => {
     turnEnded = false;
 
@@ -28,7 +28,7 @@ const boardGame = (() => {
       }
     });
   };
-  const _displayEmptyBoard = (document, player) => {
+  const _displayBoard = (document, player) => {
     const board = document.querySelector('.game-board');
     for (let i = 1; i < 10; i += 1) {
       const cell = document.createElement('div');
@@ -37,19 +37,20 @@ const boardGame = (() => {
       board.appendChild(cell);
     }
   };
-  const createEmptyBoard = (document, player) => {
+  const createBoard = (document, player) => {
     const board = [];
 
     for (let i = 0; i < 3; i += 1) {
       const row = [];
       board.push(row);
     }
-    _displayEmptyBoard(document, player);
+    _displayBoard(document, player);
     return { board };
   };
 
-  return { createEmptyBoard, turnEnded };
+  return { createBoard, turnEnded };
 })();
+
 
 const Player = (name, markerType, winningStatus) => {
   const changeWinningStatus = (newWinningStatus) => {
@@ -59,6 +60,7 @@ const Player = (name, markerType, winningStatus) => {
     name, markerType, winningStatus, changeWinningStatus,
   };
 };
+
 
 const playGame = (() => {
   const _initialize = (document) => {
@@ -73,7 +75,7 @@ const playGame = (() => {
       player2Marker = 'X';
     }
     const Player2 = Player(player2Name, player2Marker, 'inconclusive');
-    const board = boardGame.createEmptyBoard(document, Player1);
+    const board = boardGame.createBoard(document, Player1);
     return { board, Player1, Player2 };
   };
 
@@ -105,6 +107,6 @@ const playGame = (() => {
 
 const player = Player('Armando', 'X', 'inconclusive');
 console.log(player.markerType);
-boardGame.createEmptyBoard(document, player);
+boardGame.createBoard(document, player);
 
 /* playGame.play(document); */
