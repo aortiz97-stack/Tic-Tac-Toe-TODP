@@ -2,12 +2,15 @@
 /* eslint-disable no-underscore-dangle */
 const boardGame = (() => {
   let turnEnded = false;
-  const _addEventListener = (cell, player) => {
+  const _addEventListener = (cell, player, document) => {
     turnEnded = false;
     cell.addEventListener('click', () => {
       if (cell.innerHTML !== 'X' && cell.innerHTML !== 'O') {
         cell.innerHTML = player.markerType;
         turnEnded = true;
+      }
+      if (_gameWon(document)){
+          alert('GAME COMPLETED');
       }
     });
   };
@@ -16,7 +19,7 @@ const boardGame = (() => {
     for (let i = 1; i < 10; i += 1) {
       const cell = document.createElement('div');
       cell.classList.add(`cell${i}`);
-      _addEventListener(cell, player);
+      _addEventListener(cell, player, document);
       board.appendChild(cell);
     }
   };
@@ -29,6 +32,19 @@ const boardGame = (() => {
     }
     _displayEmptyBoard(document, player);
     return { board };
+  };
+
+  const _gameWon = (document) => {
+    let gameFinished = true;
+    const htmlBoard = document.querySelector('.game-board');
+    const cells = htmlBoard.children;
+
+    for (let i = 0; i < cells.length; i += 1) {
+      if (cells[i].innerHTML === '') {
+        gameFinished = false;
+      }
+    }
+    return gameFinished;
   };
 
   return { createEmptyBoard, turnEnded };
@@ -69,27 +85,26 @@ const playGame = (() => {
     return { controller };
   };
 
-  const gameWon = false;
-
   const play = (document) => {
     const gameComponents = _initialize(document);
     const { Player1 } = gameComponents;
     const { Player2 } = gameComponents;
     const { board } = gameComponents;
     let controller = Player1;
-   
-      const { turnEnded } = board;
-      if (turnEnded) {
-        controller = switchTurn(Player1, Player2, controller);
-        board.turnEnded = false;
-      }
+
+    const { turnEnded } = board;
+    if (turnEnded) {
+      controller = switchTurn(Player1, Player2, controller);
+      board.turnEnded = false;
+    }
   };
 
   return { play };
 })();
 
-/*const player = Player('Armando', 'X', 'inconclusive');
+const player = Player('Armando', 'X', 'inconclusive');
 console.log(player.markerType);
-boardGame.createEmptyBoard(document, player);*/
+boardGame.createEmptyBoard(document, player);
 
-playGame.play(document);
+
+/* playGame.play(document); */
