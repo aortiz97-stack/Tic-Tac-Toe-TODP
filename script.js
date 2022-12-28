@@ -1,28 +1,37 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
-const boardGame = ((document) => {
-  const _displayEmptyBoard = () => {
+const boardGame = (() => {
+  const _displayEmptyBoard = (document, player) => {
     const board = document.querySelector('.game-board');
     for (let i = 1; i < 10; i += 1) {
       const cell = document.createElement('div');
       cell.classList.add(`cell${i}`);
+      cell.addEventListener('click', () => {
+        // Check to see if it has been checked
+        // If yes, don't do anything
+        // If no, change innerHTML of cell with the marker of the player who clicked on it
+        if (cell.innerHTML !== 'X' || cell.innerHTML !== 'O') {
+          console.log(player);
+          cell.innerHTML = player.markerType;
+        }
+      });
       board.appendChild(cell);
     }
   };
 
-  const createEmptyBoard = () => {
+  const createEmptyBoard = (document, player) => {
     const board = [];
 
     for (let i = 0; i < 3; i += 1) {
       const row = [];
       board.push(row);
     }
-    _displayEmptyBoard();
+    _displayEmptyBoard(document, player);
     return board;
   };
 
   return { createEmptyBoard };
-})(document);
+})();
 
 const Player = (name, markerType, winningStatus) => {
   const changeWinningStatus = (newWinningStatus) => {
@@ -48,7 +57,7 @@ const playGame = (() => {
       player2Marker = 'X';
     }
     const Player2 = Player(player2Name, player2Marker, 'inconclusive');
-    return {board, Player1, Player2};
+    return { board, Player1, Player2 };
   };
 
   const play = () => {
@@ -57,3 +66,7 @@ const playGame = (() => {
 
   return { play };
 })();
+
+const player = Player('Armando', 'X', 'inconclusive');
+console.log(player.markerType);
+boardGame.createEmptyBoard(document, player);
