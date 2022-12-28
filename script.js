@@ -2,15 +2,29 @@
 /* eslint-disable no-underscore-dangle */
 const boardGame = (() => {
   let turnEnded = false;
+  const _gameCompleted = (document) => {
+    let gameFinished = true;
+    const htmlBoard = document.querySelector('.game-board');
+    const cells = htmlBoard.children;
+
+    for (let i = 0; i < cells.length; i += 1) {
+      if (cells[i].innerHTML === '') {
+        gameFinished = false;
+      }
+    }
+    return gameFinished;
+  };
+  
   const _addEventListener = (cell, player, document) => {
     turnEnded = false;
+
     cell.addEventListener('click', () => {
       if (cell.innerHTML !== 'X' && cell.innerHTML !== 'O') {
         cell.innerHTML = player.markerType;
         turnEnded = true;
       }
-      if (_gameWon(document)){
-          alert('GAME COMPLETED');
+      if (_gameCompleted(document)) {
+        alert('GAME COMPLETED');
       }
     });
   };
@@ -32,19 +46,6 @@ const boardGame = (() => {
     }
     _displayEmptyBoard(document, player);
     return { board };
-  };
-
-  const _gameWon = (document) => {
-    let gameFinished = true;
-    const htmlBoard = document.querySelector('.game-board');
-    const cells = htmlBoard.children;
-
-    for (let i = 0; i < cells.length; i += 1) {
-      if (cells[i].innerHTML === '') {
-        gameFinished = false;
-      }
-    }
-    return gameFinished;
   };
 
   return { createEmptyBoard, turnEnded };
@@ -105,6 +106,5 @@ const playGame = (() => {
 const player = Player('Armando', 'X', 'inconclusive');
 console.log(player.markerType);
 boardGame.createEmptyBoard(document, player);
-
 
 /* playGame.play(document); */
