@@ -1,16 +1,22 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
 const boardGame = (() => {
+  const _addEventListener = (cell, player) => {
+    let turnEnded = false;
+    cell.addEventListener('click', () => {
+      if (cell.innerHTML !== 'X' && cell.innerHTML !== 'O') {
+        cell.innerHTML = player.markerType;
+        turnEnded = true;
+      }
+    });
+    return { turnEnded };
+  };
   const _displayEmptyBoard = (document, player) => {
     const board = document.querySelector('.game-board');
     for (let i = 1; i < 10; i += 1) {
       const cell = document.createElement('div');
       cell.classList.add(`cell${i}`);
-      cell.addEventListener('click', () => {
-        if (cell.innerHTML !== 'X' && cell.innerHTML !== 'O') {
-          cell.innerHTML = player.markerType;
-        }
-      });
+      const { turnEnded } = _addEventListener(cell, player);
       board.appendChild(cell);
     }
   };
@@ -69,7 +75,7 @@ const playGame = (() => {
 
   const play = () => {
     const gameComponents = _initialize();
-    let controller = gameComponents.Player1;
+    const controller = gameComponents.Player1;
     while (!gameWon) {
       const controller = gameComponents.Player2;
     }
