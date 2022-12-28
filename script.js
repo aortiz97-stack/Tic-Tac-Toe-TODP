@@ -7,11 +7,7 @@ const boardGame = (() => {
       const cell = document.createElement('div');
       cell.classList.add(`cell${i}`);
       cell.addEventListener('click', () => {
-        // Check to see if it has been checked
-        // If yes, don't do anything
-        // If no, change innerHTML of cell with the marker of the player who clicked on it
-        if (cell.innerHTML !== 'X' || cell.innerHTML !== 'O') {
-          console.log(player);
+        if (cell.innerHTML !== 'X' && cell.innerHTML !== 'O') {
           cell.innerHTML = player.markerType;
         }
       });
@@ -60,8 +56,23 @@ const playGame = (() => {
     return { board, Player1, Player2 };
   };
 
+  const switchTurn = (player1, player2, controller = player1) => {
+    if (controller === player1) {
+      controller = player2;
+    } else {
+      controller = player1;
+    }
+    return { controller };
+  };
+
+  const gameWon = false;
+
   const play = () => {
-    _initialize();
+    const gameComponents = _initialize();
+    let controller = gameComponents.Player1;
+    while (!gameWon) {
+      const controller = gameComponents.Player2;
+    }
   };
 
   return { play };
