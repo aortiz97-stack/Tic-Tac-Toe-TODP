@@ -91,7 +91,7 @@ const boardGame = (() => {
       }
       console.log(`e.target.innerHTML: ${e.target.innerHTML}`);
       if (gameBeat(document).gameWon) {
-        alert(`${otherPlayer.name} wins the game!`);
+        alert(`${otherPlayer.name} won the game!`);
       }
       if (gameTied(document)) {
         alert('Cat game! Please reset the board and try again');
@@ -123,22 +123,13 @@ const boardGame = (() => {
   return { createBoard, gameBeat };
 })();
 
-const Player = (name, markerType, winningStatus) => {
-  const changeWinningStatus = (newWinningStatus) => {
-    winningStatus = newWinningStatus;
-  };
-
-  const isWinner = (winnerMarker) => markerType === winnerMarker;
-  return {
-    name, markerType, winningStatus, changeWinningStatus, isWinner,
-  };
-};
+const Player = (name, markerType) => ({ name, markerType });
 
 const playGame = (() => {
   const play = (document) => {
     const player1Name = 'Armando'; /* prompt('Player one, please enter your name:'); */
     const player1Marker = 'X'; /* prompt(('Please choose which marker you would like to use (i.e. x or o)')).toUpperCase(); */
-    const Player1 = Player(player1Name, player1Marker, 'inconclusive');
+    const Player1 = Player(player1Name, player1Marker);
     const player2Name = 'Jose';/* prompt('Player two, please enter your name:'); */
     let player2Marker;
     if (player1Marker === 'X') {
@@ -146,7 +137,7 @@ const playGame = (() => {
     } else {
       player2Marker = 'X';
     }
-    const Player2 = Player(player2Name, player2Marker, 'inconclusive');
+    const Player2 = Player(player2Name, player2Marker);
     boardGame.createBoard(document, Player1, Player2);
   };
   return { play };

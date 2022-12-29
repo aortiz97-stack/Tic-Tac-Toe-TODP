@@ -1,13 +1,45 @@
 :root {
     font-size: 5rem;
+    font-family: Verdana, sans-serif;
+}
+
+.header {
+    width: 100%;
+    padding: 20px;
+}
+
+.header, button {
+    background: gold;
+    filter: brightness(100%);
+    box-shadow: 2.2px 4.4px 4.4px hsl(0deg 0% 0% / 0.18);
+}
+
+button {
+    font-size: 0.25rem;
+}
+
+h1 {
+    font-size: 0.5rem;
+    text-align: center;
+    margin: 0;
 }
 
 body {
     height: 100vh;
     width: 100vw;
     display: flex;
+    flex-direction: column;
+    gap: 50px;
     justify-content: center;
     align-items: center;
+    /*background: #001a33;*/
+    background: white;
+}
+
+body > button {
+    border-radius: 5px;
+    width: 12.5%;
+    padding: 10px;
 }
 
 .game-board {
@@ -25,4 +57,5 @@ div[class^='cell']{
     display: flex;
     justify-content: center;
     align-items: center;
+    box-shadow: 4.4px 8.8px 8.8px hsl(0deg 0% 0% / 0.36);
 }
