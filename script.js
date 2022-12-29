@@ -128,7 +128,6 @@ const playGame = (() => {
   const resetButton = (document) => {
     const htmlButton = document.querySelector('button');
     htmlButton.addEventListener('click', () => {
-      console.log('enterred');
       const htmlBoard = document.querySelector('.game-board');
       const cells = Array.from(htmlBoard.children);
       cells.forEach((cell) => {
@@ -137,10 +136,13 @@ const playGame = (() => {
     });
   };
   const play = (document) => {
-    const player1Name = 'Armando'; /* prompt('Player one, please enter your name:'); */
-    const player1Marker = 'X'; /* prompt(('Please choose which marker you would like to use (i.e. x or o)')).toUpperCase(); */
+    const player1Name = prompt('Player one, please enter your name:');
+    const player1Marker = prompt(('Please choose which marker you would like to use (i.e. x or o)')).toUpperCase();
+    if (!['X', 'x', 'O', 'o'].includes(player1Marker)) {
+      throw new Error("Invalid marker. Please choose only from 'x' or 'o'.");
+    }
     const Player1 = Player(player1Name, player1Marker);
-    const player2Name = 'Jose';/* prompt('Player two, please enter your name:'); */
+    const player2Name = prompt('Player two, please enter your name:');
     let player2Marker;
     if (player1Marker === 'X') {
       player2Marker = 'O';
