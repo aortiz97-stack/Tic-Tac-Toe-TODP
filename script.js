@@ -83,7 +83,7 @@ const boardGame = (() => {
   const _addEventListener = (controlPlayer, otherPlayer, document) => {
     const htmlBoard = document.querySelector('.game-board');
     htmlBoard.addEventListener('click', (e) => {
-      if (e.target.innerHTML !== 'X' && e.target.innerHTML !== 'O') {
+      if (e.target.innerHTML !== 'X' && e.target.innerHTML !== 'O' && !gameBeat(document).gameWon) {
         e.target.innerHTML = controlPlayer.markerType;
         const oldControlPlayer = controlPlayer;
         controlPlayer = otherPlayer;
@@ -91,16 +91,16 @@ const boardGame = (() => {
       }
       console.log(`e.target.innerHTML: ${e.target.innerHTML}`);
       if (gameBeat(document).gameWon) {
-        alert(`Game won by player with marker ${gameBeat(document).winnerMarker}`);
+        alert(`${otherPlayer.name} wins the game!`);
       }
       if (gameTied(document)) {
-        alert('GAME TIED');
+        alert('Cat game! Please reset the board and try again');
       }
     });
     return { controlPlayer, otherPlayer };
   };
 
-  const playOneRound = (document, controlPlayer, otherPlayer) => {
+  const _displayBoard = (document, controlPlayer, otherPlayer) => {
     const HTMLboard = document.querySelector('.game-board');
     HTMLboard.innerHTML = '';
     for (let i = 1; i < 10; i += 1) {
@@ -109,14 +109,11 @@ const boardGame = (() => {
       HTMLboard.appendChild(cell);
     }
     const newPlayerPositions = _addEventListener(controlPlayer, otherPlayer, document);
+
     controlPlayer = newPlayerPositions.controlPlayer;
     otherPlayer = newPlayerPositions.otherPlayer;
 
     return { controlPlayer, otherPlayer };
-  };
-
-  const _displayBoard = (document, controlPlayer, otherPlayer) => {
-    playOneRound(document, controlPlayer, otherPlayer);
   };
 
   const createBoard = (document, controlPlayer, otherPlayer) => {
@@ -130,9 +127,10 @@ const Player = (name, markerType, winningStatus) => {
   const changeWinningStatus = (newWinningStatus) => {
     winningStatus = newWinningStatus;
   };
-  const turnEnded = false;
+
+  const isWinner = (winnerMarker) => markerType === winnerMarker;
   return {
-    name, markerType, winningStatus, changeWinningStatus, turnEnded,
+    name, markerType, winningStatus, changeWinningStatus, isWinner,
   };
 };
 
