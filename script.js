@@ -17,24 +17,19 @@ const boardGame = (() => {
   };
 
   const _addEventListener = (controlPlayer, otherPlayer, document) => {
-    let clicked = false;
     const htmlBoard = document.querySelector('.game-board');
     htmlBoard.addEventListener('click', (e) => {
-      console.log(`target: ${e.target}`);
       if (e.target.innerHTML !== 'X' && e.target.innerHTML !== 'O') {
-        clicked = true;
         e.target.innerHTML = controlPlayer.markerType;
         const oldControlPlayer = controlPlayer;
         controlPlayer = otherPlayer;
         otherPlayer = oldControlPlayer;
-        console.log(`controlPlayer: ${controlPlayer.name}`);
-        console.log(`otherPlayer: ${otherPlayer.name}`);
       }
       if (gameCompleted(document)) {
         alert('GAME COMPLETED');
       }
     });
-    return { controlPlayer, otherPlayer, clicked };
+    return { controlPlayer, otherPlayer };
   };
 
   const playOneRound = (document, controlPlayer, otherPlayer) => {
@@ -53,19 +48,8 @@ const boardGame = (() => {
   };
 
   const _displayBoard = (document, controlPlayer, otherPlayer) => {
-    let newPlayerPositions = playOneRound(document, controlPlayer, otherPlayer);
+    playOneRound(document, controlPlayer, otherPlayer);
     console.log('passed');
-    /* for (let i = 0; i < 1; i += 1) {
-      const newPlayerPositions = playOneRound(document, controlPlayer, otherPlayer);
-      controlPlayer = newPlayerPositions.controlPlayer;
-      otherPlayer = newPlayerPositions.otherPlayer;
-    } */
-    /* let newPlayerPositions = playOneRound(document, controlPlayer, otherPlayer); */
-
-    /*
-    controlPlayer = newPlayerPositions.controlPlayer;
-    otherPlayer = newPlayerPositions.otherPlayer;
-    newPlayerPositions = playOneRound(document, controlPlayer, otherPlayer);*/
   };
 
   const createBoard = (document, controlPlayer, otherPlayer) => {
@@ -93,7 +77,7 @@ const Player = (name, markerType, winningStatus) => {
 };
 
 const playGame = (() => {
-  const _initialize = (document) => {
+  const play = (document) => {
     const player1Name = 'Armando'; /* prompt('Player one, please enter your name:'); */
     const player1Marker = 'X'; /* prompt(('Please choose which marker you would like to use (i.e. x or o)')).toUpperCase(); */
     const Player1 = Player(player1Name, player1Marker, 'inconclusive');
@@ -106,42 +90,12 @@ const playGame = (() => {
     }
     const Player2 = Player(player2Name, player2Marker, 'inconclusive');
     const board = boardGame.createBoard(document, Player1, Player2);
-    return { board, Player1, Player2 };
   };
-
-  const switchTurn = (player1, player2, controller = player1) => {
-    let otherPlayer;
-    if (controller === player1) {
-      controller = player2;
-      otherPlayer = player1;
-    } else {
-      controller = player1;
-      otherPlayer = player2;
-    }
-    return { controller, otherPlayer };
-  };
-
-  const play = (document) => {
-    const gameComponents = _initialize(document);
-    const { Player1 } = gameComponents;
-    const { Player2 } = gameComponents;
-    const { board } = gameComponents;
-    let controller = Player1;
-    let otherPlayer = Player2;
-
-    if (controller.turnEnded) {
-      const switchingMethod = switchTurn(Player1, Player2, controller);
-      controller = switchingMethod.controller;
-      otherPlayer = switchingMethod.otherPlayer;
-      boardGame.createBoard(document, controller, otherPlayer);
-    }
-  };
-
   return { play };
 })();
 
-const player1 = Player('Armando', 'X', 'inconclusive');
+/*const player1 = Player('Armando', 'X', 'inconclusive');
 const player2 = Player('Jose', 'O', 'inconclusive');
-boardGame.createBoard(document, player1, player2);
+boardGame.createBoard(document, player1, player2);*/
 
-/* playGame.play(document); */
+playGame.play(document);
