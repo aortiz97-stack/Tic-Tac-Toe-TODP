@@ -15,6 +15,8 @@ const boardGame = (() => {
   };
 
   const gameBeat = (document) => {
+    let winnerMarker;
+
     function winnableLine(n1, n2, n3) {
       const cells = document.querySelector('.game-board').children;
       const rowWinningCells = [];
@@ -58,6 +60,7 @@ const boardGame = (() => {
         for (let j = 0; j < line.length; j += 1) {
           const cell = line[j];
           if (firstMarker !== '' && cell.innerHTML === firstMarker && j === line.length - 1 && line[1].innerHTML === firstMarker) {
+            winnerMarker = firstMarker;
             return true;
           }
         }
@@ -73,8 +76,8 @@ const boardGame = (() => {
       return (rowWon || colWon || diagonalWon);
     }
 
-    const answer = matchOver();
-    return answer;
+    const gameWon = matchOver();
+    return { gameWon, winnerMarker };
   };
 
   const _addEventListener = (controlPlayer, otherPlayer, document) => {
@@ -87,8 +90,8 @@ const boardGame = (() => {
         otherPlayer = oldControlPlayer;
       }
       console.log(`e.target.innerHTML: ${e.target.innerHTML}`);
-      if (gameBeat(document)) {
-        alert('Game beat');
+      if (gameBeat(document).gameWon) {
+        alert(`Game won by player with marker ${gameBeat(document).winnerMarker}`);
       }
       if (gameTied(document)) {
         alert('GAME TIED');
