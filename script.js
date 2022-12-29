@@ -15,8 +15,8 @@ const boardGame = (() => {
   };
 
   const gameBeat = (document) => {
-    const cells = document.querySelector('.game-board').children;
-    function winnableLines(n1, n2, n3) {
+    function winnableLine(n1, n2, n3) {
+      const cells = document.querySelector('.game-board').children;
       const rowWinningCells = [];
       for (let i = 0; i < cells.length; i += 1) {
         const cell = cells[i];
@@ -31,22 +31,28 @@ const boardGame = (() => {
       }
       return rowWinningCells;
     }
+    // Function takes divs of a winnable line (i.e. row, column, diagonal),
+    //and puts all winnable line combos for that particular type of line into one array
+    function packageWinnableLines(line1, line2, line3 = undefined) {
+      const winnableLines = [];
+      winnableLines.push(line1);
+      winnableLines.push(line2);
+      if (line3 !== undefined) {
+        winnableLines.push(line3);
+      }
+      return winnableLines;
+    }
 
     function rowWon() {
-      const winnableRows = [];
-      const row1 = winnableLines(1, 2, 3);
-      winnableRows.push(row1);
-      const row2 = winnableLines(4, 5, 6);
-      winnableRows.push(row2);
-      const row3 = winnableLines(7, 8, 9);
-      winnableRows.push(row3);
+      const row1 = winnableLine(1, 2, 3);
+      const row2 = winnableLine(4, 5, 6);
+      const row3 = winnableLine(7, 8, 9);
+      const winnableRows = packageWinnableLines(row1, row2, row3);
 
       for (let i = 0; i < winnableRows.length; i += 1) {
         const row = winnableRows[i];
         const firstMarker = row[0].innerHTML;
-        console.log(`FIRSTMARKER: ${firstMarker}`);
         for (let j = 0; j < row.length; j += 1) {
-          console.log('Enterred second for loop');
           const cell = row[j];
           if (firstMarker !== '' && cell.innerHTML === firstMarker && j === row.length - 1 && row[1].innerHTML === firstMarker) {
             return true;
@@ -56,7 +62,6 @@ const boardGame = (() => {
       return false;
     }
     const answer = rowWon();
-    console.log(`ANSWER: ${answer}`);
     return answer;
   };
 
