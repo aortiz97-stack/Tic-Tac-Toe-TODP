@@ -32,36 +32,48 @@ const boardGame = (() => {
       return rowWinningCells;
     }
     // Function takes divs of a winnable line (i.e. row, column, diagonal),
-    //and puts all winnable line combos for that particular type of line into one array
-    function packageWinnableLines(line1, line2, line3 = undefined) {
+    // and puts all winnable line combos for that particular type of line into one array
+    function packageWinnableLines(winnableLine1, winnableLine2, winnableLine3 = undefined) {
       const winnableLines = [];
-      winnableLines.push(line1);
-      winnableLines.push(line2);
-      if (line3 !== undefined) {
-        winnableLines.push(line3);
+      winnableLines.push(winnableLine1);
+      winnableLines.push(winnableLine2);
+      if (winnableLine3 !== undefined) {
+        winnableLines.push(winnableLine3);
       }
       return winnableLines;
     }
 
-    function rowWon() {
-      const row1 = winnableLine(1, 2, 3);
-      const row2 = winnableLine(4, 5, 6);
-      const row3 = winnableLine(7, 8, 9);
-      const winnableRows = packageWinnableLines(row1, row2, row3);
+    function lineWon(n1, n2, n3, n4, n5, n6, n7 = undefined, n8 = undefined, n9 = undefined) {
+      const line1 = winnableLine(n1, n2, n3);
+      const line2 = winnableLine(n4, n5, n6);
+      let line3;
+      if (n9 !== undefined) {
+        line3 = winnableLine(n7, n8, n9);
+      }
+      const winnableLines = packageWinnableLines(line1, line2, line3);
 
-      for (let i = 0; i < winnableRows.length; i += 1) {
-        const row = winnableRows[i];
-        const firstMarker = row[0].innerHTML;
-        for (let j = 0; j < row.length; j += 1) {
-          const cell = row[j];
-          if (firstMarker !== '' && cell.innerHTML === firstMarker && j === row.length - 1 && row[1].innerHTML === firstMarker) {
+      for (let i = 0; i < winnableLines.length; i += 1) {
+        const line = winnableLines[i];
+        const firstMarker = line[0].innerHTML;
+        for (let j = 0; j < line.length; j += 1) {
+          const cell = line[j];
+          if (firstMarker !== '' && cell.innerHTML === firstMarker && j === line.length - 1 && line[1].innerHTML === firstMarker) {
             return true;
           }
         }
       }
       return false;
     }
-    const answer = rowWon();
+
+    function matchOver() {
+      const rowWon = lineWon(1, 2, 3, 4, 5, 6, 7, 8, 9);
+      const colWon = lineWon(1, 4, 7, 2, 5, 8, 3, 6, 9);
+      const diagonalWon = lineWon(1, 5, 9, 3, 5, 7);
+
+      return (rowWon || colWon || diagonalWon);
+    }
+
+    const answer = matchOver();
     return answer;
   };
 
