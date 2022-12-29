@@ -1,8 +1,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
 const boardGame = (() => {
-  const board = [];
-
   const gameCompleted = (document) => {
     let gameFinished = true;
     const htmlBoard = document.querySelector('.game-board');
@@ -49,18 +47,10 @@ const boardGame = (() => {
 
   const _displayBoard = (document, controlPlayer, otherPlayer) => {
     playOneRound(document, controlPlayer, otherPlayer);
-    console.log('passed');
   };
 
   const createBoard = (document, controlPlayer, otherPlayer) => {
-    if (board.length === 0) {
-      for (let i = 0; i < 3; i += 1) {
-        const row = [];
-        board.push(row);
-      }
-    }
     _displayBoard(document, controlPlayer, otherPlayer);
-    return { board };
   };
 
   return { createBoard, gameCompleted };
@@ -89,7 +79,7 @@ const playGame = (() => {
       player2Marker = 'X';
     }
     const Player2 = Player(player2Name, player2Marker, 'inconclusive');
-    const board = boardGame.createBoard(document, Player1, Player2);
+    boardGame.createBoard(document, Player1, Player2);
   };
   return { play };
 })();
