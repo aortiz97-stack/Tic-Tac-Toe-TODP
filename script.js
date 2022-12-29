@@ -16,7 +16,7 @@ const boardGame = (() => {
 
   const gameBeat = (document) => {
     const cells = document.querySelector('.game-board').children;
-    function lineWon(n1, n2 ,n3) {
+    function winnableLines(n1, n2, n3) {
       const rowWinningCells = [];
       for (let i = 0; i < cells.length; i += 1) {
         const cell = cells[i];
@@ -31,8 +31,33 @@ const boardGame = (() => {
       }
       return rowWinningCells;
     }
-    const answer = lineWon(1, 2, 3);
-    return { answer };
+
+    function rowWon() {
+      const winnableRows = [];
+      const row1 = winnableLines(1, 2, 3);
+      winnableRows.push(row1);
+      const row2 = winnableLines(4, 5, 6);
+      winnableRows.push(row2);
+      const row3 = winnableLines(7, 8, 9);
+      winnableRows.push(row3);
+
+      for (let i = 0; i < winnableRows.length; i += 1) {
+        const row = winnableRows[i];
+        const firstMarker = row[0].innerHTML;
+        console.log(`FIRSTMARKER: ${firstMarker}`);
+        for (let j = 0; j < row.length; j += 1) {
+          console.log('Enterred second for loop');
+          const cell = row[j];
+          if (firstMarker !== '' && cell.innerHTML === firstMarker && j === row.length - 1 && row[1].innerHTML === firstMarker) {
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+    const answer = rowWon();
+    console.log(`ANSWER: ${answer}`);
+    return answer;
   };
 
   const _addEventListener = (controlPlayer, otherPlayer, document) => {
@@ -43,6 +68,10 @@ const boardGame = (() => {
         const oldControlPlayer = controlPlayer;
         controlPlayer = otherPlayer;
         otherPlayer = oldControlPlayer;
+      }
+      console.log(`e.target.innerHTML: ${e.target.innerHTML}`);
+      if (gameBeat(document)) {
+        alert('Game beat');
       }
       if (gameTied(document)) {
         alert('GAME TIED');
