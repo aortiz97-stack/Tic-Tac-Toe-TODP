@@ -125,6 +125,17 @@ const boardGame = (() => {
 const Player = (name, markerType) => ({ name, markerType });
 
 const playGame = (() => {
+  const resetButton = (document) => {
+    const htmlButton = document.querySelector('button');
+    htmlButton.addEventListener('click', () => {
+      console.log('enterred');
+      const htmlBoard = document.querySelector('.game-board');
+      const cells = Array.from(htmlBoard.children);
+      cells.forEach((cell) => {
+        cell.innerHTML = '';
+      });
+    });
+  };
   const play = (document) => {
     const player1Name = 'Armando'; /* prompt('Player one, please enter your name:'); */
     const player1Marker = 'X'; /* prompt(('Please choose which marker you would like to use (i.e. x or o)')).toUpperCase(); */
@@ -137,8 +148,10 @@ const playGame = (() => {
       player2Marker = 'X';
     }
     const Player2 = Player(player2Name, player2Marker);
+    resetButton(document);
     boardGame.createBoard(document, Player1, Player2);
   };
+
   return { play };
 })();
 
