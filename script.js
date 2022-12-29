@@ -89,11 +89,10 @@ const boardGame = (() => {
         controlPlayer = otherPlayer;
         otherPlayer = oldControlPlayer;
       }
-      console.log(`e.target.innerHTML: ${e.target.innerHTML}`);
       if (gameBeat(document).gameWon) {
         alert(`${otherPlayer.name} won the game!`);
       }
-      if (gameTied(document)) {
+      if (gameTied(document) && !gameBeat(document).gameWon) {
         alert('Cat game! Please reset the board and try again');
       }
     });
@@ -144,5 +143,3 @@ const playGame = (() => {
 })();
 
 playGame.play(document);
-
-console.log(boardGame.gameBeat(document));
