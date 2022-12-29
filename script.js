@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
 const boardGame = (() => {
-  const gameCompleted = (document) => {
+  const gameTied = (document) => {
     let gameFinished = true;
     const htmlBoard = document.querySelector('.game-board');
     const cells = htmlBoard.children;
@@ -14,6 +14,27 @@ const boardGame = (() => {
     return gameFinished;
   };
 
+  const gameBeat = (document) => {
+    const cells = document.querySelector('.game-board').children;
+    function lineWon(n1, n2 ,n3) {
+      const rowWinningCells = [];
+      for (let i = 0; i < cells.length; i += 1) {
+        const cell = cells[i];
+        const cellClassList = cells[i].classList;
+        const cellClass = cellClassList[0];
+
+        if (cellClass[cellClass.length - 1] === n1.toString()
+         || cellClass[cellClass.length - 1] === n2.toString()
+          || cellClass[cellClass.length - 1] === n3.toString()) {
+          rowWinningCells.push(cell);
+        }
+      }
+      return rowWinningCells;
+    }
+    const answer = lineWon(1, 2, 3);
+    return { answer };
+  };
+
   const _addEventListener = (controlPlayer, otherPlayer, document) => {
     const htmlBoard = document.querySelector('.game-board');
     htmlBoard.addEventListener('click', (e) => {
@@ -23,8 +44,8 @@ const boardGame = (() => {
         controlPlayer = otherPlayer;
         otherPlayer = oldControlPlayer;
       }
-      if (gameCompleted(document)) {
-        alert('GAME COMPLETED');
+      if (gameTied(document)) {
+        alert('GAME TIED');
       }
     });
     return { controlPlayer, otherPlayer };
@@ -53,7 +74,7 @@ const boardGame = (() => {
     _displayBoard(document, controlPlayer, otherPlayer);
   };
 
-  return { createBoard, gameCompleted };
+  return { createBoard, gameBeat };
 })();
 
 const Player = (name, markerType, winningStatus) => {
@@ -84,8 +105,6 @@ const playGame = (() => {
   return { play };
 })();
 
-/*const player1 = Player('Armando', 'X', 'inconclusive');
-const player2 = Player('Jose', 'O', 'inconclusive');
-boardGame.createBoard(document, player1, player2);*/
-
 playGame.play(document);
+
+console.log(boardGame.gameBeat(document));
