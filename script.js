@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
 const boardGame = (() => {
-  const gameTied = (document) => {
+  const _gameTied = (document) => {
     let gameFinished = true;
     const htmlBoard = document.querySelector('.game-board');
     const cells = htmlBoard.children;
@@ -14,7 +14,7 @@ const boardGame = (() => {
     return gameFinished;
   };
 
-  const gameBeat = (document) => {
+  const _gameBeat = (document) => {
     let winnerMarker;
 
     function winnableLine(n1, n2, n3) {
@@ -68,7 +68,7 @@ const boardGame = (() => {
       return false;
     }
 
-    function matchOver() {
+    function _matchOver() {
       const rowWon = lineWon(1, 2, 3, 4, 5, 6, 7, 8, 9);
       const colWon = lineWon(1, 4, 7, 2, 5, 8, 3, 6, 9);
       const diagonalWon = lineWon(1, 5, 9, 3, 5, 7);
@@ -76,23 +76,23 @@ const boardGame = (() => {
       return (rowWon || colWon || diagonalWon);
     }
 
-    const gameWon = matchOver();
+    const gameWon = _matchOver();
     return { gameWon, winnerMarker };
   };
 
   const _addEventListener = (controlPlayer, otherPlayer, document) => {
     const htmlBoard = document.querySelector('.game-board');
     htmlBoard.addEventListener('click', (e) => {
-      if (e.target.innerHTML !== 'X' && e.target.innerHTML !== 'O' && !gameBeat(document).gameWon) {
+      if (e.target.innerHTML !== 'X' && e.target.innerHTML !== 'O' && !_gameBeat(document).gameWon) {
         e.target.innerHTML = controlPlayer.markerType;
         const oldControlPlayer = controlPlayer;
         controlPlayer = otherPlayer;
         otherPlayer = oldControlPlayer;
       }
-      if (gameBeat(document).gameWon) {
+      if (_gameBeat(document).gameWon) {
         alert(`${otherPlayer.name} won the game!`);
       }
-      if (gameTied(document) && !gameBeat(document).gameWon) {
+      if (_gameTied(document) && !_gameBeat(document).gameWon) {
         alert('Cat game! Please reset the board and try again');
       }
     });
@@ -119,7 +119,7 @@ const boardGame = (() => {
     _displayBoard(document, controlPlayer, otherPlayer);
   };
 
-  return { createBoard, gameBeat };
+  return { createBoard };
 })();
 
 const Player = (name, markerType) => ({ name, markerType });
