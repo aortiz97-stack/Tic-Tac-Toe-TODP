@@ -1,7 +1,31 @@
+/* eslint-disable max-classes-per-file */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
-const boardGame = (() => {
-  const _gameTied = (document) => {
+class BoardGame {
+  constructor(document, controlPlayer, otherPlayer) {
+    this.document = document;
+    this.controlPlayer = controlPlayer;
+    this.otherPlayer = otherPlayer;
+    this.createBoard(this.document, this.controlPlayer, this.otherPlayer);
+  }
+
+  get controlPlayer() {
+    return this._controlPlayer;
+  }
+
+  set controlPlayer(controlPlayer) {
+    this._controlPlayer = controlPlayer;
+  }
+
+  get otherPlayer() {
+    return this._otherPlayer;
+  }
+
+  set otherPlayer(otherPlayer) {
+    this._otherPlayer = otherPlayer;
+  }
+
+  _gameTied() {
     let gameFinished = true;
     const htmlBoard = document.querySelector('.game-board');
     const cells = htmlBoard.children;
@@ -12,11 +36,9 @@ const boardGame = (() => {
       }
     }
     return gameFinished;
-  };
+  }
 
-  const _gameBeat = (document) => {
-    let winnerMarker;
-
+  _gameBeat() {
     function winnableLine(n1, n2, n3) {
       const cells = document.querySelector('.game-board').children;
       const rowWinningCells = [];
@@ -60,7 +82,6 @@ const boardGame = (() => {
         for (let j = 0; j < line.length; j += 1) {
           const cell = line[j];
           if (firstMarker !== '' && cell.innerHTML === firstMarker && j === line.length - 1 && line[1].innerHTML === firstMarker) {
-            winnerMarker = firstMarker;
             return true;
           }
         }
@@ -77,29 +98,28 @@ const boardGame = (() => {
     }
 
     const gameWon = _matchOver();
-    return { gameWon, winnerMarker };
-  };
+    return gameWon;
+  }
 
-  const _addEventListener = (controlPlayer, otherPlayer, document) => {
+  _addEventListener() {
     const htmlBoard = document.querySelector('.game-board');
     htmlBoard.addEventListener('click', (e) => {
-      if (e.target.innerHTML !== 'X' && e.target.innerHTML !== 'O' && !_gameBeat(document).gameWon) {
-        e.target.innerHTML = controlPlayer.markerType;
-        const oldControlPlayer = controlPlayer;
-        controlPlayer = otherPlayer;
-        otherPlayer = oldControlPlayer;
+      if (e.target.innerHTML !== 'X' && e.target.innerHTML !== 'O' && !this._gameBeat(document)) {
+        e.target.innerHTML = this._controlPlayer.markerType;
+        const oldControlPlayer = this._controlPlayer;
+        this._controlPlayer = this._otherPlayer;
+        this._otherPlayer = oldControlPlayer;
       }
-      if (_gameBeat(document).gameWon) {
-        alert(`${otherPlayer.name} won the game!`);
+      if (this._gameBeat()) {
+        alert(`${this._otherPlayer.name} won the game!`);
       }
-      if (_gameTied(document) && !_gameBeat(document).gameWon) {
+      if (this._gameTied() && !this._gameBeat()) {
         alert('Cat game! Please reset the board and try again');
       }
     });
-    return { controlPlayer, otherPlayer };
-  };
+  }
 
-  const _displayBoard = (document, controlPlayer, otherPlayer) => {
+  _displayBoard() {
     const HTMLboard = document.querySelector('.game-board');
     HTMLboard.innerHTML = '';
     for (let i = 1; i < 10; i += 1) {
@@ -107,25 +127,47 @@ const boardGame = (() => {
       cell.classList.add(`cell${i}`);
       HTMLboard.appendChild(cell);
     }
-    const newPlayerPositions = _addEventListener(controlPlayer, otherPlayer, document);
+    this._addEventListener();
+  }
 
-    controlPlayer = newPlayerPositions.controlPlayer;
-    otherPlayer = newPlayerPositions.otherPlayer;
+  createBoard() {
+    this._displayBoard();
+  }
+}
 
-    return { controlPlayer, otherPlayer };
-  };
+class Player {
+  constructor(name, markerType) {
+    this.name = name;
+    this.markerType = markerType;
+  }
 
-  const createBoard = (document, controlPlayer, otherPlayer) => {
-    _displayBoard(document, controlPlayer, otherPlayer);
-  };
+  get markerType() {
+    return this._markerType;
+  }
 
-  return { createBoard };
-})();
+  /**
+     * @param {any} markerType
+     */
+  set markerType(newMarkerType) {
+    this._markerType = newMarkerType;
+  }
 
-const Player = (name, markerType) => ({ name, markerType });
+  get name() {
+    return this._name;
+  }
 
-const playGame = (() => {
-  const resetButton = (document) => {
+  set name(newName) {
+    this._name = newName;
+  }
+}
+
+class PlayGame {
+  constructor(document) {
+    this.document = document;
+    this.play();
+  }
+
+  resetButton() {
     const htmlButton = document.querySelector('button');
     htmlButton.addEventListener('click', () => {
       const htmlBoard = document.querySelector('.game-board');
@@ -134,14 +176,15 @@ const playGame = (() => {
         cell.innerHTML = '';
       });
     });
-  };
-  const play = (document) => {
+  }
+
+  play() {
     const player1Name = prompt('Player one, please enter your name:');
     const player1Marker = prompt(('Please choose which marker you would like to use (i.e. x or o)')).toUpperCase();
     if (!['X', 'x', 'O', 'o'].includes(player1Marker)) {
       throw new Error("Invalid marker. Please choose only from 'x' or 'o'.");
     }
-    const Player1 = Player(player1Name, player1Marker);
+    const Player1 = new Player(player1Name, player1Marker);
     const player2Name = prompt('Player two, please enter your name:');
     let player2Marker;
     if (player1Marker === 'X') {
@@ -149,12 +192,10 @@ const playGame = (() => {
     } else {
       player2Marker = 'X';
     }
-    const Player2 = Player(player2Name, player2Marker);
-    resetButton(document);
-    boardGame.createBoard(document, Player1, Player2);
-  };
+    const Player2 = new Player(player2Name, player2Marker);
+    this.resetButton(document);
+    const boardGame = new BoardGame(document, Player1, Player2);
+  }
+}
 
-  return { play };
-})();
-
-playGame.play(document);
+const game = new PlayGame();
