@@ -3,12 +3,12 @@
     font-family: Verdana, sans-serif;
 }
 
-.header {
+header {
     width: 100%;
     padding: 20px;
 }
 
-.header, button {
+header, button {
     background: gold;
     filter: brightness(100%);
     box-shadow: 2.2px 4.4px 4.4px hsl(0deg 0% 0% / 0.18);
@@ -33,11 +33,12 @@ body {
     justify-content: center;
     align-items: center;
     background: white;
+    padding: 15px;
 }
 
 body > button {
     border-radius: 5px;
-    width: 12.5%;
+    max-width: 100%;
     padding: 10px;
 }
 
