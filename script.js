@@ -180,9 +180,9 @@ class PlayGame {
 
   play() {
     const player1Name = prompt('Player one, please enter your name:');
-    const player1Marker = prompt(('Please choose which marker you would like to use (i.e. x or o)')).toUpperCase();
-    if (!['X', 'x', 'O', 'o'].includes(player1Marker)) {
-      throw new Error("Invalid marker. Please choose only from 'x' or 'o'.");
+    let player1Marker = prompt(('Please choose which marker you would like to use (i.e. x or o)')).toUpperCase();
+    while (!['X', 'x', 'O', 'o'].includes(player1Marker)) {
+      player1Marker = prompt("Invalid marker. Please choose only from 'x' or 'o'.");
     }
     const Player1 = new Player(player1Name, player1Marker);
     const player2Name = prompt('Player two, please enter your name:');
